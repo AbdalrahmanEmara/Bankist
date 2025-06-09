@@ -93,7 +93,13 @@ const createUserName = function (accs) {
 };
 
 createUserName(accounts);
-console.log(accounts);
+// console.log(accounts);
+
+const calcDisplayBalance = function(acc) {
+  const balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = balance + '€';
+};
+calcDisplayBalance(account1);
 /////////////////////////////////////////////////
 // LECTURES
 
