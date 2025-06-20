@@ -181,7 +181,7 @@ btnTransfer.addEventListener('click', function (e) {
   }
 });
 
-btnLoan.addEventListener('click', function(e) {
+btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
 
   const amount = Number(inputLoanAmount.value);
@@ -192,7 +192,8 @@ btnLoan.addEventListener('click', function(e) {
     // Update UI
     updateUI(currentAccount);
   }
-})
+  inputLoanAmount.value = '';
+});
 
 // closing account
 btnClose.addEventListener('click', function (e) {
@@ -202,7 +203,9 @@ btnClose.addEventListener('click', function (e) {
     inputCloseUsername.value === currentAccount.username &&
     Number(inputClosePin.value) === currentAccount.pin
   ) {
-    const index = accounts.findIndex(acc => acc.username === currentAccount.username);
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
     console.log(index);
     // .indexOf(22)
 
@@ -212,7 +215,7 @@ btnClose.addEventListener('click', function (e) {
     // Hide UI
     containerApp.style.opacity = 0;
   }
-  
+
   inputCloseUsername.value = inputClosePin.value = '';
 });
 /////////////////////////////////////////////////
