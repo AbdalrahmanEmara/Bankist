@@ -75,7 +75,7 @@ const displayMovements = function (movements, sort) {
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-        <div class="movements__value">${mov}€</div>
+        <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
 
@@ -98,19 +98,19 @@ createUserName(accounts);
 
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = acc.balance + '€';
+  labelBalance.textContent = acc.balance.toFixed(2) + '€';
 };
 
 const calcDisplaySummary = function (acc) {
   const income = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov);
-  labelSumIn.textContent = `${income}€`;
+  labelSumIn.textContent = `${income.toFixed(2)}€`;
 
   const outcome = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(outcome)}€`;
+  labelSumOut.textContent = `${Math.abs(outcome).toFixed(2)}€`;
 
   const interest = acc.movements
     .filter(mov => mov > 0)
@@ -145,7 +145,7 @@ btnLogin.addEventListener('click', function (e) {
     acc => acc.username === inputLoginUsername.value
   );
 
-  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+  if (currentAccount?.pin === +inputLoginPin.value) {
     // Display UI and message
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(' ')[0]
@@ -161,7 +161,7 @@ btnLogin.addEventListener('click', function (e) {
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
 
-  const amount = Number(inputTransferAmount.value);
+  const amount = +inputTransferAmount.value;
   const receiverAcc = accounts.find(
     acc => acc.username === inputTransferTo.value
   );
@@ -187,7 +187,7 @@ btnTransfer.addEventListener('click', function (e) {
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
 
-  const amount = Number(inputLoanAmount.value);
+  const amount = Math.floor(inputLoanAmount.value);
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // Add movement
     currentAccount.movements.push(amount);
@@ -204,7 +204,7 @@ btnClose.addEventListener('click', function (e) {
 
   if (
     inputCloseUsername.value === currentAccount.username &&
-    Number(inputClosePin.value) === currentAccount.pin
+    +inputClosePin.value === currentAccount.pin
   ) {
     const index = accounts.findIndex(
       acc => acc.username === currentAccount.username
@@ -229,103 +229,10 @@ btnSort.addEventListener('click', function(e) {
   sorted = !sorted;
   displayMovements(currentAccount.movements, sorted);
 });
-/////////////////////////////////////////////////
-// LECTURES
 
-// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
-/////////////////////////////////////////////////
-/*
-let arr = ['a', 'b', 'c', 'd', 'e'];
-
-// SLICE
-console.log(arr.slice(2)); 
-console.log(arr.slice(2, 4));
-console.log(arr.slice(-2));
-console.log(arr.slice(-1));
-console.log(arr.slice(1, -2));
-console.log(arr.slice());
-console.log([...arr]);
-
-// SPLICE (mutate)
-// => Extracting elements gone from original array
-
-// console.log(arr.splice(2));
-arr.splice(-1); // delete last element
-console.log(arr);
-
-arr.splice(1, 2); // .splice(start, delete_count)
-
-// REVERSE (mutate)
-arr = ['a', 'b', 'c', 'd', 'e'];
-const arr2 = ['j', 'i', 'h', 'g', 'f'];
-
-console.log(arr2.reverse());
-console.log(arr2);
-
-// CONCAT (not mutate)
-const letters = arr.concat(arr2);
-console.log(letters);
-console.log([...arr, ...arr2]);
-
-// JOIN
-console.log(letters.join(' - '));
-
-const arr = [23, 11, 64];
-console.log(arr[0]);
-console.log(arr.at(0));
-
-// getting last array element
-console.log(arr[arr.length - 1]);
-console.log(arr.slice(-1)[0]);
-console.log(arr.at(-1));
-
-// also works with strings
-console.log('jonas'.at(0));
-console.log('jonas'.at(-1));
-
-// FOREACH
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
-// for (const movement of movements) {
-  for (const [i, movement] of movements.entries()) {
-    if (movement > 0) {
-      console.log(`Movement ${i+1}: You deposited ${movement}`);
-    } else {
-      console.log(`Movement ${i+1}: You withdraw ${Math.abs(movement)}`);
-  }
-}
-
-// forEach can't use (continue, break)
-console.log('____ FOREACH _____');
-
-movements.forEach(function (mov, i, arr) {
-  if (mov > 0) {
-    console.log(`Movement ${i+1}: You deposited ${mov}`);
-  } else {
-    console.log(`Movement ${i+1}: You withdraw ${Math.abs(mov)}`);
-}
-})
-
-// FOREACH With maps and sets
-
-// Map
-const currencies = new Map([
-  ['USD', 'United States dollar'],
-  ['EUR', 'Euro'],
-  ['GBP', 'Pound sterling'],
-]);
-
-currencies.forEach(function (value, key, map) {
-  console.log(`${key}: ${value}`);
+labelBalance.addEventListener('click', function () {
+  [...document.querySelectorAll('.movements__row')].forEach(function (row, i) {
+    // 0, 2, 4, 6
+    if (i % 2 === 0) row.style.backgroundColor = 'orangered';
+  });
 });
-
-// Set
-const currenciesUnique = new Set(['USD', 'EUR', 'GBP', 'USD', 'EUR']);
-console.log(currenciesUnique);
-
-currenciesUnique.forEach(function(value, _, set) {
-  console.log(`${value}: ${value}`);
-});
-
-*/
